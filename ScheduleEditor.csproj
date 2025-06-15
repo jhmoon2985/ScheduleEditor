@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
     <AssemblyTitle>Schedule Editor</AssemblyTitle>
     <AssemblyDescription>배터리 시험 스케줄 편집 프로그램</AssemblyDescription>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>

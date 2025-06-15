@@ -15,7 +15,7 @@ namespace ScheduleEditor.Services
     {
         public async Task<string> ExportScheduleAsync(Schedule schedule)
         {
-            var json = JsonConvert.SerializeObject(schedule, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(schedule, Newtonsoft.Json.Formatting.Indented);
             var fileName = $"{schedule.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.json";
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
 
@@ -34,7 +34,7 @@ namespace ScheduleEditor.Services
 
         public async Task ExportToExcelAsync(Schedule schedule, string filePath)
         {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
             using var package = new ExcelPackage();
             var worksheet = package.Workbook.Worksheets.Add("Schedule");

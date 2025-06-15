@@ -105,7 +105,7 @@ namespace ScheduleEditor.Services
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory!);
 
-            var json = JsonConvert.SerializeObject(_processes, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(_processes, Newtonsoft.Json.Formatting.Indented);
             await File.WriteAllTextAsync(_dataPath, json);
         }
 
