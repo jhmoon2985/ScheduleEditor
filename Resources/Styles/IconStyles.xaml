@@ -1,0 +1,83 @@
+﻿<!-- Resources/Styles/IconStyles.xaml -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Insert/Add Icon (Plus) -->
+    <Canvas x:Key="InsertIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
+    </Canvas>
+
+    <!-- Delete Icon (Trash) -->
+    <Canvas x:Key="DeleteIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+    </Canvas>
+
+    <!-- Edit Icon (Pencil) -->
+    <Canvas x:Key="EditIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
+    </Canvas>
+
+    <!-- Copy Icon (Duplicate) -->
+    <Canvas x:Key="CopyIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/>
+    </Canvas>
+
+    <!-- Import Icon (Download/In) -->
+    <Canvas x:Key="ImportIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z M12,11L16,15H13V19H11V15H8L12,11Z"/>
+    </Canvas>
+
+    <!-- Export Icon (Upload/Out) -->
+    <Canvas x:Key="ExportIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z M12,13L8,9H11V5H13V9H16L12,13Z"/>
+    </Canvas>
+
+    <!-- Settings Icon (Gear) -->
+    <Canvas x:Key="SettingsIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
+    </Canvas>
+
+    <!-- Close/Exit Icon (X) -->
+    <Canvas x:Key="CloseIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+    </Canvas>
+
+    <!-- Paste Icon (Clipboard) -->
+    <Canvas x:Key="PasteIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M19,20H5V4H7V7H17V4H19M12,2A1,1 0 0,1 13,3A1,1 0 0,1 12,4A1,1 0 0,1 11,3A1,1 0 0,1 12,2M19,2H14.82C14.4,0.84 13.3,0 12,0C10.7,0 9.6,0.84 9.18,2H5A2,2 0 0,0 3,4V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V4A2,2 0 0,0 19,2Z"/>
+    </Canvas>
+
+    <!-- Arrow Up Icon -->
+    <Canvas x:Key="ArrowUpIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"/>
+    </Canvas>
+
+    <!-- Arrow Down Icon -->
+    <Canvas x:Key="ArrowDownIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/>
+    </Canvas>
+
+    <!-- File Icon -->
+    <Canvas x:Key="FileIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}" 
+              Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+    </Canvas>
+
+    <!-- Excel Icon -->
+    <Canvas x:Key="ExcelIcon" Width="24" Height="24" Clip="F1 M 0,0L 24,0L 24,24L 0,24L 0,0">
+        <Path Fill="#207245" 
+              Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z M8.93,12.22H10.66L12.53,15.96H14.4L12.42,11.94L14.32,8.44H12.63L10.83,11.45H10.79L9.04,8.44H7.35L9.21,11.94L7.18,15.96H9.05L8.93,12.22Z"/>
+    </Canvas>
+
+</ResourceDictionary>

@@ -1,0 +1,266 @@
+﻿<!-- Views/ScheduleEditView.xaml (ComboBox 수정) -->
+<UserControl x:Class="ScheduleEditor.Views.ScheduleEditView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:local="clr-namespace:ScheduleEditor.Views"
+             xmlns:models="clr-namespace:ScheduleEditor.Models"
+             xmlns:localBehaviors="clr-namespace:ScheduleEditor.Behaviors"
+             xmlns:converters="clr-namespace:ScheduleEditor.Converters">
+
+    <UserControl.Resources>
+        <converters:EnumToStringConverter x:Key="EnumToStringConverter"/>
+
+        <!-- StepType Values -->
+        <x:Array x:Key="StepTypeValues" Type="models:StepType">
+            <models:StepType>Cycle</models:StepType>
+            <models:StepType>OCV</models:StepType>
+            <models:StepType>Charge</models:StepType>
+            <models:StepType>Discharge</models:StepType>
+            <models:StepType>Pattern</models:StepType>
+            <models:StepType>Rest</models:StepType>
+            <models:StepType>Loop</models:StepType>
+            <models:StepType>Finish</models:StepType>
+            <models:StepType>GroupCycle</models:StepType>
+            <models:StepType>GroupLoop</models:StepType>
+        </x:Array>
+
+        <!-- StepMode Values -->
+        <x:Array x:Key="StepModeValues" Type="models:StepMode">
+            <models:StepMode>CC</models:StepMode>
+            <models:StepMode>CCCV</models:StepMode>
+            <models:StepMode>CP</models:StepMode>
+            <models:StepMode>CPCV</models:StepMode>
+        </x:Array>
+
+        <!-- ChamberMode Values -->
+        <x:Array x:Key="ChamberModeValues" Type="models:ChamberMode">
+            <models:ChamberMode>Off</models:ChamberMode>
+            <models:ChamberMode>Heat</models:ChamberMode>
+            <models:ChamberMode>Cool</models:ChamberMode>
+            <models:ChamberMode>Auto</models:ChamberMode>
+        </x:Array>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="{Binding ScheduleName, StringFormat='스케줄 편집: {0}'}" 
+                   FontSize="18" FontWeight="Bold" Margin="10"/>
+
+        <!-- Toolbar -->
+        <ToolBar Grid.Row="1" Margin="10,0">
+            <Button Command="{Binding AddStepCommand}" ToolTip="Step 삽입">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{StaticResource InsertIcon}" Width="20" Height="20"/>
+                    <TextBlock Text="삽입" Margin="5,0"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding DeleteStepCommand}" ToolTip="Step 삭제">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{StaticResource DeleteIcon}" Width="20" Height="20"/>
+                    <TextBlock Text="삭제" Margin="5,0"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding CopyStepCommand}" ToolTip="Step 복사">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{StaticResource CopyIcon}" Width="20" Height="20"/>
+                    <TextBlock Text="복사" Margin="5,0"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding PasteStepCommand}" ToolTip="Step 붙여넣기">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{StaticResource PasteIcon}" Width="20" Height="20"/>
+                    <TextBlock Text="붙여넣기" Margin="5,0"/>
+                </StackPanel>
+            </Button>
+            <Separator/>
+            <Button Command="{Binding MoveUpCommand}" ToolTip="위로 이동">
+                <ContentControl Content="{StaticResource ArrowUpIcon}" Width="20" Height="20"/>
+            </Button>
+            <Button Command="{Binding MoveDownCommand}" ToolTip="아래로 이동">
+                <ContentControl Content="{StaticResource ArrowDownIcon}" Width="20" Height="20"/>
+            </Button>
+        </ToolBar>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="350"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Step List -->
+            <DataGrid Grid.Column="0" ItemsSource="{Binding Steps}" 
+                      AutoGenerateColumns="False" 
+                      CanUserAddRows="False"
+                      SelectionMode="Single"
+                      Margin="10">
+                <behaviors:Interaction.Behaviors>
+                    <localBehaviors:DataGridBehavior SelectedItem="{Binding SelectedStep}"/>
+                </behaviors:Interaction.Behaviors>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Step" Binding="{Binding StepNumber}" Width="50" IsReadOnly="True"/>
+                    <DataGridComboBoxColumn Header="Type" SelectedValueBinding="{Binding Type}" 
+                                            ItemsSource="{StaticResource StepTypeValues}" Width="100"/>
+                    <DataGridComboBoxColumn Header="Mode" SelectedValueBinding="{Binding Mode}" 
+                                            ItemsSource="{StaticResource StepModeValues}" Width="80"/>
+                    <DataGridTextColumn Header="충전(V)" Binding="{Binding ChargeVoltage}" Width="80"/>
+                    <DataGridTextColumn Header="방전(V)" Binding="{Binding DischargeVoltage}" Width="80"/>
+                    <DataGridTextColumn Header="전류(A)" Binding="{Binding Current}" Width="80"/>
+                    <DataGridTextColumn Header="파워(W)" Binding="{Binding Power}" Width="80"/>
+                    <DataGridTextColumn Header="종료조건" Binding="{Binding EndConditions.Count, StringFormat='{0}개'}" Width="80" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="안전조건" Binding="{Binding StepSafeties.Count, StringFormat='{0}개'}" Width="80" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- Step Details Panel -->
+            <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Margin="10">
+                <ScrollViewer>
+                    <StackPanel Margin="10" DataContext="{Binding SelectedStep}">
+                        <!-- Step Safety -->
+                        <GroupBox Header="Step Safety 및 기록조건, 챔버 설정">
+                            <StackPanel>
+                                <!-- Step Safety -->
+                                <GroupBox Header="Step 안전조건" Margin="5">
+                                    <StackPanel>
+                                        <CheckBox Content="사용" IsChecked="True" Margin="5"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Label Grid.Row="0" Grid.Column="0" Content="이름:"/>
+                                            <TextBox Grid.Row="0" Grid.Column="1" Text="전압 안전조건" Margin="5"/>
+
+                                            <Label Grid.Row="1" Grid.Column="0" Content="값:"/>
+                                            <TextBox Grid.Row="1" Grid.Column="1" Text="5.0" Margin="5"/>
+
+                                            <Label Grid.Row="2" Grid.Column="0" Content="단위:"/>
+                                            <TextBox Grid.Row="2" Grid.Column="1" Text="V" Margin="5"/>
+
+                                            <Label Grid.Row="3" Grid.Column="0" Content="Ref Step:"/>
+                                            <TextBox Grid.Row="3" Grid.Column="1" Text="1" Margin="5"/>
+                                        </Grid>
+                                        <Button Content="① 모든 Step 안전조건 적용" Margin="5"/>
+                                        <Button Content="② 동일 Step 안전조건 적용" Margin="5"/>
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <!-- Record Condition -->
+                                <GroupBox Header="기록조건" Margin="5">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0" Content="Time (S):"/>
+                                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding RecordCondition.TimeInterval}" Margin="5"/>
+
+                                        <Label Grid.Row="1" Grid.Column="0" Content="Voltage (V):"/>
+                                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordCondition.VoltageChange}" Margin="5"/>
+
+                                        <Label Grid.Row="2" Grid.Column="0" Content="Current (A):"/>
+                                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding RecordCondition.CurrentChange}" Margin="5"/>
+
+                                        <Label Grid.Row="3" Grid.Column="0" Content="Temp (℃):"/>
+                                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding RecordCondition.TemperatureChange}" Margin="5"/>
+                                    </Grid>
+                                </GroupBox>
+
+                                <!-- Chamber Setting -->
+                                <GroupBox Header="챔버 설정" Margin="5">
+                                    <StackPanel>
+                                        <CheckBox Content="Step Wait" IsChecked="{Binding ChamberSetting.StepWait}" Margin="5"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Label Grid.Row="0" Grid.Column="0" Content="Chamber Temp:"/>
+                                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ChamberSetting.Temperature}" Margin="5"/>
+
+                                            <Label Grid.Row="1" Grid.Column="0" Content="Chamber Mode:"/>
+                                            <ComboBox Grid.Row="1" Grid.Column="1" 
+                                                      SelectedValue="{Binding ChamberSetting.Mode}" 
+                                                      ItemsSource="{StaticResource ChamberModeValues}" 
+                                                      Margin="5"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <!-- End Conditions -->
+                        <GroupBox Header="Step 종료조건 편집">
+                            <StackPanel>
+                                <TextBlock Text="▣ 종료조건 설정" FontWeight="Bold" Margin="5"/>
+                                <TextBlock Text="- MoveStep: 해당 종료조건에 도달할 시 이동할 Step을 지정" FontSize="10" Margin="5"/>
+                                <TextBlock Text="- SOC/DOD의 경우 Reference Step을 지정해야함" FontSize="10" Margin="5"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Label Grid.Row="0" Grid.Column="0" Content="종료전압 HIGH"/>
+                                    <TextBox Grid.Row="0" Grid.Column="1" Text="4.2" Margin="2"/>
+                                    <Label Grid.Row="0" Grid.Column="2" Content="V"/>
+
+                                    <Label Grid.Row="1" Grid.Column="0" Content="종료전압 LOW"/>
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="2.5" Margin="2"/>
+                                    <Label Grid.Row="1" Grid.Column="2" Content="V"/>
+
+                                    <Label Grid.Row="2" Grid.Column="0" Content="종료전류"/>
+                                    <TextBox Grid.Row="2" Grid.Column="1" Text="0.05" Margin="2"/>
+                                    <Label Grid.Row="2" Grid.Column="2" Content="A"/>
+
+                                    <Label Grid.Row="3" Grid.Column="0" Content="종료시간"/>
+                                    <TextBox Grid.Row="3" Grid.Column="1" Text="3600" Margin="2"/>
+                                    <Label Grid.Row="3" Grid.Column="2" Content="S"/>
+
+                                    <Label Grid.Row="4" Grid.Column="0" Content="종료용량"/>
+                                    <TextBox Grid.Row="4" Grid.Column="1" Text="2.5" Margin="2"/>
+                                    <Label Grid.Row="4" Grid.Column="2" Content="Ah"/>
+                                </Grid>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

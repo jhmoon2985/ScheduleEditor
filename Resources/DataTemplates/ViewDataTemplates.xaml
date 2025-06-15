@@ -1,0 +1,27 @@
+﻿<!-- ViewModels을 Views에 매핑하는 DataTemplate -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:ScheduleEditor.ViewModels"
+                    xmlns:views="clr-namespace:ScheduleEditor.Views">
+
+    <!-- ProcessListViewModel -> ProcessListView -->
+    <DataTemplate DataType="{x:Type vm:ProcessListViewModel}">
+        <views:ProcessListView/>
+    </DataTemplate>
+
+    <!-- ScheduleListViewModel -> ScheduleListView -->
+    <DataTemplate DataType="{x:Type vm:ScheduleListViewModel}">
+        <views:ScheduleListView/>
+    </DataTemplate>
+
+    <!-- ScheduleEditViewModel -> ScheduleEditView -->
+    <DataTemplate DataType="{x:Type vm:ScheduleEditViewModel}">
+        <views:ScheduleEditView/>
+    </DataTemplate>
+
+    <!-- SettingsViewModel -> SettingsView -->
+    <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+        <views:SettingsView/>
+    </DataTemplate>
+
+</ResourceDictionary>
