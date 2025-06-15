@@ -15,16 +15,29 @@ namespace ScheduleEditor
         {
             base.OnStartup(e);
 
-            var services = new ServiceCollection();
-            ConfigureServices(services);
-            _serviceProvider = services.BuildServiceProvider();
-
-            var mainWindow = new MainWindow
+            try
             {
-                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
-            };
+                var services = new ServiceCollection();
+                ConfigureServices(services);
+                _serviceProvider = services.BuildServiceProvider();
 
-            mainWindow.Show();
+                // MainWindow 생성 및 DataContext 설정
+                var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
+                var mainWindow = new MainWindow();
+
+                // DataContext 설정 후 Show 호출
+                mainWindow.DataContext = mainViewModel;
+                mainWindow.Show();
+
+                // 메인 윈도우 설정
+                this.MainWindow = mainWindow;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"애플리케이션 시작 중 오류가 발생했습니다: {ex.Message}",
+                               "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Shutdown();
+            }
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -35,14 +48,14 @@ namespace ScheduleEditor
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            // Services
+            // Services (Singleton으로 등록)
             services.AddSingleton<IProcessService, ProcessService>();
             services.AddSingleton<IScheduleService, ScheduleService>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IDialogService, DialogService>();
 
-            // ViewModels
-            services.AddTransient<MainViewModel>();
+            // ViewModels (Singleton으로 변경)
+            services.AddSingleton<MainViewModel>();
             services.AddTransient<ProcessListViewModel>();
             services.AddTransient<ScheduleListViewModel>();
             services.AddTransient<ScheduleEditViewModel>();

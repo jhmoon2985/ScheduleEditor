@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using ScheduleEditor.Models;
 using ScheduleEditor.Services.Interfaces;
@@ -26,13 +25,29 @@ namespace ScheduleEditor.ViewModels
             _dialogService = dialogService;
             _fileService = fileService;
 
+            // Commands 초기화
             ShowProcessListCommand = new RelayCommand(ShowProcessList);
             ExportToExcelCommand = new RelayCommand(async () => await ExportToExcelAsync(), () => SelectedSchedule != null);
             ExitCommand = new RelayCommand(() => System.Windows.Application.Current.Shutdown());
             ShowSettingsCommand = new RelayCommand(ShowSettings);
 
             // 시작 시 프로세스 목록 표시
-            ShowProcessList();
+            InitializeAsync();
+        }
+
+        private async void InitializeAsync()
+        {
+            try
+            {
+                // 서비스 초기화 확인
+                await _processService.GetAllProcessesAsync();
+                ShowProcessList();
+            }
+            catch (System.Exception ex)
+            {
+                await _dialogService.ShowErrorAsync($"초기화 중 오류가 발생했습니다: {ex.Message}");
+                ShowProcessList(); // 오류가 있어도 기본 화면은 표시
+            }
         }
 
         public object? CurrentView
@@ -60,21 +75,35 @@ namespace ScheduleEditor.ViewModels
 
         private void ShowProcessList()
         {
-            CurrentView = new ProcessListViewModel(_processService, _dialogService, this);
+            try
+            {
+                CurrentView = new ProcessListViewModel(_processService, _dialogService, this);
+            }
+            catch (System.Exception ex)
+            {
+                _dialogService.ShowErrorAsync($"프로세스 목록을 표시하는 중 오류가 발생했습니다: {ex.Message}");
+            }
         }
 
         private async Task ExportToExcelAsync()
         {
             if (SelectedSchedule == null) return;
 
-            var fileName = await _fileService.SaveFileAsync(
-                "Excel Files (*.xlsx)|*.xlsx",
-                $"{SelectedSchedule.Name}.xlsx");
-
-            if (!string.IsNullOrEmpty(fileName))
+            try
             {
-                await _fileService.ExportToExcelAsync(SelectedSchedule, fileName);
-                await _dialogService.ShowInfoAsync($"Excel 파일로 내보내기 완료: {fileName}");
+                var fileName = await _fileService.SaveFileAsync(
+                    "Excel Files (*.xlsx)|*.xlsx",
+                    $"{SelectedSchedule.Name}.xlsx");
+
+                if (!string.IsNullOrEmpty(fileName))
+                {
+                    await _fileService.ExportToExcelAsync(SelectedSchedule, fileName);
+                    await _dialogService.ShowInfoAsync($"Excel 파일로 내보내기 완료: {fileName}");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                await _dialogService.ShowErrorAsync($"Excel 내보내기 중 오류가 발생했습니다: {ex.Message}");
             }
         }
 
